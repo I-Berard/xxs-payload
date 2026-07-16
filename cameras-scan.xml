@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.95 scan initiated Tue Nov 11 20:26:08 2025 as: /usr/lib/nmap/nmap -&#45;privileged -sS -p 80,443,554,5544,8000,8080,8554 -&#45;open -sV -&#45;script=banner,http-title,rtsp-methods -oA cameras-scan 10.11.72.1/22 -->
+<nmaprun scanner="nmap" args="/usr/lib/nmap/nmap -&#45;privileged -sS -p 80,443,554,5544,8000,8080,8554 -&#45;open -sV -&#45;script=banner,http-title,rtsp-methods -oA cameras-scan 10.11.72.1/22" start="1762885568" startstr="Tue Nov 11 20:26:08 2025" version="7.95" xmloutputversion="1.05">
+<scaninfo type="syn" protocol="tcp" numservices="7" services="80,443,554,5544,8000,8080,8554"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<runstats><finished time="1762885624" timestr="Tue Nov 11 20:27:04 2025" summary="Nmap done at Tue Nov 11 20:27:04 2025; 1024 IP addresses (1 host up) scanned in 55.40 seconds" elapsed="55.40" exit="success"/><hosts up="1" down="1023" total="1024"/>
+</runstats>
+</nmaprun>

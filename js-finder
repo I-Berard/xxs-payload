@@ -1,0 +1,83 @@
+javascript:(async()=>{
+const d=document.createElement('div');
+d.style.cssText='position:fixed;bottom:0;left:0;width:50%;height:50vh;overflow:auto;background:#fff;padding:10px;z-index:9999';
+document.body.appendChild(d);
+
+const cd=document.createElement('div');
+cd.innerHTML='Scanning recursively for JS files...';
+d.appendChild(cd);
+
+// ---- helpers ----
+const isJS = url => /\.js(\?|$)/i.test(url);
+
+const normalize = (url)=>{
+  try{
+    return new URL(url, location.href).href;
+  }catch{
+    return null;
+  }
+};
+
+const extractJS = content => {
+  return [...content.matchAll(/['"]([^'"]+\.js[^'"]*)['"]/gi)]
+    .map(m => normalize(m[1]))
+    .filter(Boolean)
+    .filter(isJS);
+};
+
+const fetchText = async (url)=>{
+  try{
+    const res = await fetch(url);
+    return res.ok ? await res.text() : null;
+  }catch{
+    return null;
+  }
+};
+
+// ---- BFS crawler ----
+const visited = new Set();
+const queue = [];
+
+// seed with initial JS resources
+performance.getEntriesByType("resource")
+  .map(e=>e.name)
+  .filter(isJS)
+  .forEach(u=>{
+    const n = normalize(u);
+    if(n) queue.push(n);
+  });
+
+let results = [];
+
+while(queue.length){
+  const url = queue.shift();
+
+  if(visited.has(url)) continue;
+  visited.add(url);
+
+  cd.innerHTML = `Scanning: ${url}<br>Found: ${visited.size}`;
+
+  const content = await fetchText(url);
+  if(!content) continue;
+
+  const found = extractJS(content);
+
+  for(const f of found){
+    if(!visited.has(f)){
+      queue.push(f);
+    }
+  }
+}
+
+// final output
+results = [...visited];
+
+cd.innerHTML = `
+<h3>JS Files (${results.length})</h3>
+<ul style="font-size:12px;">
+${results.map(u=>`<li>${u}</li>`).join('')}
+</ul>
+`;
+
+})();
+
